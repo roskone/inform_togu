@@ -21,8 +21,8 @@ jobs:
     name: Тесты парсера
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -36,8 +36,8 @@ jobs:
     needs: test
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -46,13 +46,20 @@ jobs:
         run: npx electron-builder --mac --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
-      - uses: actions/upload-artifact@v4
+      - name: Артефакт для Apple Silicon
+        uses: actions/upload-artifact@v5
         with:
-          name: togu-raspisanie-mac
-          path: |
-            dist/*.dmg
-            dist/*.zip
+          name: togu-raspisanie-mac-arm64
+          path: dist/*-arm64.dmg
           if-no-files-found: error
+          compression-level: 0
+      - name: Артефакт для Intel
+        uses: actions/upload-artifact@v5
+        with:
+          name: togu-raspisanie-mac-x64
+          path: dist/*-x64.dmg
+          if-no-files-found: error
+          compression-level: 0
       - name: Публикация релиза
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
