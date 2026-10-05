@@ -181,10 +181,13 @@
   // «… (числитель)», «… по знаменателю», «… (ч)»
   const INLINE_MARKER_RE = /[([]\s*(?:по\s+)?(числител[а-яёa-z0-9_]*|знаменател[а-яёa-z0-9_]*|ч|з)\s*[)\]]|(?:^|[\s,;–—-])по\s+(числител[а-яёa-z0-9_]*|знаменател[а-яёa-z0-9_]*)/i;
 
+  // «Ч Математика» — отдельная буква-маркер перед названием с заглавной буквы
+  const LETTER_MARKER_RE = /^\s*(Ч|З)\s+(?=[А-ЯЁA-Z])/;
+
   function stripWeekMarkers(text) {
     let t = text;
     let week = null;
-    const p = t.match(PREFIX_MARKER_RE);
+    const p = t.match(PREFIX_MARKER_RE) || t.match(LETTER_MARKER_RE);
     if (p) {
       week = weekFromToken(p[1]);
       t = t.slice(p[0].length);

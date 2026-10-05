@@ -115,6 +115,17 @@ test('объединение отдельных страниц числител�
   assert.deepEqual(map, { 'Математика': null, 'Физика': 'num', 'Химия': 'den' });
 });
 
+test('маркер недели в одной строке с предметом', () => {
+  const doc = new JSDOM(`<table><tr><th colspan="2">Четверг</th></tr>
+    <tr><td>08:30-10:00</td><td><span class="danger">Ч</span> Математика<br>ауд. 101</td></tr>
+    <tr><td>10:10-11:40</td><td>З: Физика (пр.)<br>Петров П.П.<br>ауд. 202</td></tr></table>`).window.document;
+  const res = P.parseSchedule(doc);
+  assert.deepEqual(res.lessons.map((l) => [l.subject, l.week, l.rooms[0]]), [
+    ['Математика', 'num', '101'],
+    ['Физика', 'den', '202'],
+  ]);
+});
+
 test('страница «Расписание недель»', () => {
   const doc = load('weektypes.html');
   assert.equal(P.parseWeekTypesPage(doc, new Date(2026, 9, 4)).type, 'num');
