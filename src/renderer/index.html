@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Расписание ТОГУ</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="titlebar">
+      <div class="titlebar-inner">
+        <div class="brand">
+          <span class="logo" id="logo"></span>
+          <nav class="crumbs" aria-label="Группа">
+            <span class="crumb crumb-muted">ТОГУ</span>
+            <span class="crumb-sep">/</span>
+            <span class="crumb" id="group-name">Расписание</span>
+            <span class="badge badge-outline" id="semester-badge" hidden></span>
+          </nav>
+        </div>
+        <div class="titlebar-actions">
+          <button class="btn btn-ghost btn-icon" id="btn-refresh" title="Обновить (⌘R)" aria-label="Обновить"></button>
+          <button class="btn btn-ghost btn-icon" id="btn-settings" title="Настройки (⌘,)" aria-label="Настройки"></button>
+        </div>
+      </div>
+    </header>
+
+    <main class="content" id="content">
+      <section class="daybar">
+        <button class="btn btn-default btn-icon" id="btn-prev" title="Предыдущий день (←)" aria-label="Предыдущий день"></button>
+        <div class="day-heading">
+          <div class="eyebrow" id="day-eyebrow">Завтра</div>
+          <h1 class="day-title" id="day-title">—</h1>
+        </div>
+        <button class="btn btn-default btn-icon" id="btn-next" title="Следующий день (→)" aria-label="Следующий день"></button>
+      </section>
+
+      <div class="subbar">
+        <div class="tabs" role="tablist" id="quick-tabs">
+          <button class="tab" data-offset="0" role="tab">Сегодня</button>
+          <button class="tab" data-offset="1" role="tab">Завтра</button>
+          <button class="tab" data-offset="2" role="tab">Послезавтра</button>
+        </div>
+        <span class="week-pill" id="week-pill" title=""></span>
+      </div>
+
+      <div id="banner"></div>
+      <section class="stats" id="stats"></section>
+      <section class="lessons" id="lessons" aria-live="polite"></section>
+    </main>
+
+    <footer class="statusbar">
+      <div class="status-left" id="status-left"></div>
+      <button class="status-link" id="status-site" title="Открыть страницу группы на сайте"></button>
+    </footer>
+  </div>
+
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <aside class="sheet" id="sheet-settings" aria-label="Настройки" hidden>
+    <header class="sheet-header">
+      <div>
+        <h2>Настройки</h2>
+        <p class="sheet-sub">Источник данных и отображение</p>
+      </div>
+      <button class="btn btn-ghost btn-icon" data-close aria-label="Закрыть"></button>
+    </header>
+    <div class="sheet-body">
+      <div class="field">
+        <label class="field-label" for="set-url">Ссылка на расписание группы</label>
+        <div class="input-row">
+          <input class="input mono" id="set-url" type="url" spellcheck="false" placeholder="https://togudv.ru/rasp/groups/69092/?semester_id=33">
+          <button class="btn btn-default btn-icon" id="set-url-open" title="Открыть в браузере" aria-label="Открыть в браузере"></button>
+        </div>
+        <p class="field-help">Страница группы на <span class="mono">togudv.ru/rasp</span>. В новом семестре выберите его на сайте и вставьте новую ссылку (меняется <span class="mono">semester_id</span>).</p>
+      </div>
+
+      <div class="field">
+        <span class="field-label">Подгруппа</span>
+        <div class="segmented" id="set-subgroup">
+          <button data-value="0">Все</button>
+          <button data-value="1">1</button>
+          <button data-value="2">2</button>
+          <button data-value="3" hidden>3</button>
+        </div>
+        <p class="field-help">Скрывает пары другой подгруппы. Пары без подгруппы видны всегда.</p>
+      </div>
+
+      <div class="field">
+        <span class="field-label">Текущая неделя</span>
+        <div class="segmented" id="set-week">
+          <button data-value="auto">Авто</button>
+          <button data-value="num">Числитель</button>
+          <button data-value="den">Знаменатель</button>
+        </div>
+        <p class="field-help" id="set-week-help"></p>
+      </div>
+
+      <div class="field">
+        <span class="field-label">Тема</span>
+        <div class="segmented" id="set-theme">
+          <button data-value="dark">Тёмная</button>
+          <button data-value="light">Светлая</button>
+          <button data-value="system">Как в системе</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field-label">Диагностика</span>
+        <div class="card card-row">
+          <div>
+            <div class="card-title">Как приложение прочитало страницу</div>
+            <div class="field-help" id="set-debug-summary">—</div>
+          </div>
+          <button class="btn btn-default" id="set-debug-open">Открыть</button>
+        </div>
+      </div>
+    </div>
+    <footer class="sheet-footer">
+      <button class="btn btn-default" data-close>Отмена</button>
+      <button class="btn btn-primary" id="set-save">Сохранить</button>
+    </footer>
+  </aside>
+
+  <aside class="sheet sheet-wide" id="sheet-debug" aria-label="Диагностика" hidden>
+    <header class="sheet-header">
+      <div>
+        <h2>Диагностика разбора</h2>
+        <p class="sheet-sub">Все занятия, найденные на странице</p>
+      </div>
+      <button class="btn btn-ghost btn-icon" data-close aria-label="Закрыть"></button>
+    </header>
+    <div class="sheet-body" id="debug-body"></div>
+    <footer class="sheet-footer">
+      <button class="btn btn-default" id="debug-copy">Скопировать JSON</button>
+      <button class="btn btn-primary" id="debug-export">Сохранить HTML…</button>
+    </footer>
+  </aside>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="lib/icons.js"></script>
+  <script src="lib/parser.js"></script>
+  <script src="lib/weeks.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

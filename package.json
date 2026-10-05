@@ -1,0 +1,65 @@
+{
+  "name": "togu-raspisanie",
+  "productName": "Расписание ТОГУ",
+  "version": "1.0.0",
+  "description": "Пары на завтра для группы ТОГУ: время, аудитория, числитель/знаменатель. Данные — togudv.ru/rasp.",
+  "main": "src/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.js",
+    "dist:mac": "electron-builder --mac",
+    "dist:mac:arm64": "electron-builder --mac --arm64",
+    "dist:mac:x64": "electron-builder --mac --x64"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roskone/inform_togu.git"
+  },
+  "license": "MIT",
+  "build": {
+    "appId": "ru.togudv.raspisanie",
+    "productName": "Расписание ТОГУ",
+    "artifactName": "togu-raspisanie-${version}-${arch}.${ext}",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.education",
+      "icon": "build/icon.png",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "identity": "-",
+      "darkModeSupport": true,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false
+    },
+    "dmg": {
+      "title": "Расписание ТОГУ"
+    }
+  },
+  "devDependencies": {
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3",
+    "jsdom": "^30.1.2"
+  }
+}

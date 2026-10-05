@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#232323"/>
+      <stop offset="1" stop-color="#0d0d0d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.58" r="0.5">
+      <stop offset="0" stop-color="#3ecf8e" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#3ecf8e" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="brand" gradientUnits="userSpaceOnUse" x1="262" y1="244" x2="762" y2="740">
+      <stop offset="0" stop-color="#5ee0a6"/>
+      <stop offset="1" stop-color="#24b47e"/>
+    </linearGradient>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="186" fill="url(#bg)"/>
+  <rect x="100" y="100" width="824" height="824" rx="186" fill="url(#glow)"/>
+  <rect x="102" y="102" width="820" height="820" rx="184" fill="none" stroke="#3a3a3a" stroke-width="4"/>
+  <!-- календарь -->
+  <rect x="262" y="300" width="500" height="440" rx="64" fill="#121212" stroke="url(#brand)" stroke-width="36"/>
+  <line x1="262" y1="420" x2="762" y2="420" stroke="url(#brand)" stroke-width="30"/>
+  <line x1="390" y1="244" x2="390" y2="340" stroke="url(#brand)" stroke-width="36" stroke-linecap="round"/>
+  <line x1="634" y1="244" x2="634" y2="340" stroke="url(#brand)" stroke-width="36" stroke-linecap="round"/>
+  <!-- сетка дней -->
+  <g fill="#3a3a3a">
+    <rect x="330" y="482" width="76" height="76" rx="18"/>
+    <rect x="474" y="482" width="76" height="76" rx="18"/>
+    <rect x="618" y="482" width="76" height="76" rx="18"/>
+    <rect x="330" y="606" width="76" height="76" rx="18"/>
+    <rect x="618" y="606" width="76" height="76" rx="18"/>
+  </g>
+  <rect x="474" y="606" width="76" height="76" rx="18" fill="#3ecf8e"/>
+</svg>
